@@ -115,7 +115,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func requestInfo(query: String) {
         let api_key = "VeMvPDjbDKRFidJmUe94wYSsO9y1f5r3VEcKcYXT"
-        var ndbno = ""
         
         let queryParams: [String: String] = [
             "format": "json",
@@ -129,7 +128,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         Alamofire.request("https://api.nal.usda.gov/ndb/search/", method: .get, parameters: queryParams).responseJSON { (response) in
             if response.result.isSuccess {
                 let foodJSON: JSON = JSON(response.result.value!)
-                ndbno = foodJSON["list"]["item"][0]["ndbno"].stringValue
+                let ndbno = foodJSON["list"]["item"][0]["ndbno"].stringValue
                 
                 let nutrientParams: [String: String] = [
                     "format" : "json",
