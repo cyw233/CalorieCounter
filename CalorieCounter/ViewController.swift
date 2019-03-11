@@ -45,7 +45,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func processImage(_ image: UIImage) {
-        requestInfo()
         let model = Food101()
         let size = CGSize(width: 299, height: 299)
         
@@ -62,10 +61,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         imageView.image = image
         classificationLabel.text = "\(result.classLabel) - \(converted) %"
+        requestInfo(query: result.classLabel)
         if result.classLabel == "miso_soup" {
             food = Food(type: result.classLabel, calories: caloriesOfFood[result.classLabel]!)
         } else {
-            
             food = Food(type: result.classLabel, calories: 0.0)
         }
     }
@@ -114,23 +113,40 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     
-    func requestInfo() {
-        let parameters : [String:String] = [
-            "format" : "json",
-            "api_key": "VeMvPDjbDKRFidJmUe94wYSsO9y1f5r3VEcKcYXT",
-            "ndbno": "09040",
-            "nutrients": "208"
+    func requestInfo(query: String) {
+        let api_key = "VeMvPDjbDKRFidJmUe94wYSsO9y1f5r3VEcKcYXT"
+        var ndbno = ""
+        
+        let queryParams: [String: String] = [
+            "format": "json",
+            "api_key": api_key,
+            "nutrients": "208",
+            "q": query,
+            "sort": "n",
+            "max": "3",
+            "offset": "0"
         ]
-        Alamofire.request("https://api.nal.usda.gov/ndb/nutrients/", method: .get, parameters: parameters).responseJSON { (response) in
+        Alamofire.request("https://api.nal.usda.gov/ndb/search/", method: .get, parameters: queryParams).responseJSON { (response) in
             if response.result.isSuccess {
-                print("got info")
-                print(response)
+                let foodJSON: JSON = JSON(response.result.value!)
+                ndbno = foodJSON["list"]["item"][0]["ndbno"].stringValue
                 
-                let flowerJSON: JSON = JSON(response.result.value!)
-                print(flowerJSON)
-                
+                let nutrientParams: [String: String] = [
+                    "format" : "json",
+                    "api_key": api_key,
+                    "ndbno": ndbno,
+                    "nutrients": "208"
+                ]
+                Alamofire.request("https://api.nal.usda.gov/ndb/nutrients/", method: .get, parameters: nutrientParams).responseJSON { (response) in
+                    if response.result.isSuccess {
+                        let nutrientJSON: JSON = JSON(response.result.value!)
+                        print(nutrientJSON)
+                        
+                    }
+                }
             }
         }
+        
     }
     
 }
