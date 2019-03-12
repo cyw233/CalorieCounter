@@ -15,7 +15,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
      This value is passed by `ViewController` in `processImage(_ image: UIImage)`
      */
     var food: Food?
-    var caloriesOfFood = ["miso_soup": 60.0] // 60Cal/100ml
+//    var caloriesOfFood = ["miso_soup": 60.0] // 60Cal/100ml
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        if (imageView.image == nil) {
+            classificationLabel.text = "Please take a photo or choose from the album"
+        }
+
+    }
     
     @IBAction func takePicture(_ sender: Any) {
         let picker = UIImagePickerController()
@@ -60,13 +69,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let converted = String(format: "%.2f", confidence)
         
         imageView.image = image
-        classificationLabel.text = "\(result.classLabel) - \(converted) %"
-        requestInfo(query: result.classLabel)
-        if result.classLabel == "miso_soup" {
-            food = Food(type: result.classLabel, calories: caloriesOfFood[result.classLabel]!)
-        } else {
-            food = Food(type: result.classLabel, calories: 0.0)
+        let foodLabel = result.classLabel.replacingOccurrences(of: "_", with: " ")
+        classificationLabel.text = "\(foodLabel.capitalized) - \(converted) %"
+    
+        requestInfo(query: foodLabel) {(calories: Int) in
+            self.food = Food(type: foodLabel.capitalized, calories: Double(calories))
         }
+        
+        
+//        if result.classLabel == "miso_soup" {
+//            food = Food(type: result.classLabel, calories: caloriesOfFood[result.classLabel]!)
+//        } else {
+//            food = Food(type: result.classLabel, calories: 0.0)
+//        }
     }
     
     //MARK: - Navigation
@@ -81,17 +96,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }))
                 self.present(alert, animated: true, completion: nil)
                 return false
-            } else if caloriesOfFood.keys.contains((food?.type)!) {
+            } else {
                 os_log("Food is set. Continue to calculate calories", log: OSLog.default, type: .debug)
                 return true
-            } else {
-                let notInDBAlert = UIAlertController(title: "Alert", message: "The information has not been set for this type!", preferredStyle: .alert)
-                notInDBAlert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-                    NSLog("The \"OK\" alert occured.")
-                }))
-                self.present(notInDBAlert, animated: true, completion: nil)
-                return false
             }
+//            else if caloriesOfFood.keys.contains((food?.type)!) {
+//                os_log("Food is set. Continue to calculate calories", log: OSLog.default, type: .debug)
+//                return true
+//            } else {
+//                let notInDBAlert = UIAlertController(title: "Alert", message: "The information has not been set for this type!", preferredStyle: .alert)
+//                notInDBAlert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+//                    NSLog("The \"OK\" alert occured.")
+//                }))
+//                self.present(notInDBAlert, animated: true, completion: nil)
+//                return false
+//            }
         }
         // by default, transition
         return true
@@ -113,7 +132,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     
-    func requestInfo(query: String) {
+    func requestInfo(query: String, completion: @escaping (_ result: Int) -> Void) {
         let api_key = "VeMvPDjbDKRFidJmUe94wYSsO9y1f5r3VEcKcYXT"
         
         let queryParams: [String: String] = [
@@ -139,8 +158,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 Alamofire.request("https://api.nal.usda.gov/ndb/nutrients/", method: .get, parameters: nutrientParams).responseJSON { (response) in
                     if response.result.isSuccess {
                         let nutrientJSON: JSON = JSON(response.result.value!)
-                        print(nutrientJSON)
-                        
+                        print(nutrientJSON["report"]["foods"][0]["nutrients"][0]["gm"].intValue)
+                        // Return calorie value per 100g of the food
+                        completion(nutrientJSON["report"]["foods"][0]["nutrients"][0]["gm"].intValue)
                     }
                 }
             }

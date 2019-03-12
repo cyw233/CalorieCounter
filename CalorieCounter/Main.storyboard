@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tTG-G0-0wc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="tTG-G0-0wc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -39,8 +38,8 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f06-Zb-U4b">
-                                <rect key="frame" x="0.0" y="622" width="375" height="45"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f06-Zb-U4b">
+                                <rect key="frame" x="0.0" y="623" width="375" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="VSK-91-ZRO"/>
                                 </constraints>
@@ -51,7 +50,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="YqE-gP-kss"/>
-                                    <barButtonItem title="Choose Image…" id="SpQ-9j-DaF">
+                                    <barButtonItem title="Choose Image" id="SpQ-9j-DaF">
                                         <connections>
                                             <action selector="chooseImage:" destination="BYZ-38-t0r" id="NuC-Lg-Y2n"/>
                                         </connections>
@@ -71,7 +70,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Food " id="q8K-67-3yc">
-                        <barButtonItem key="rightBarButtonItem" title="See calories..." id="43n-Bg-cGb">
+                        <barButtonItem key="rightBarButtonItem" title="See Calories" id="43n-Bg-cGb">
                             <connections>
                                 <action selector="measureSize:" destination="BYZ-38-t0r" id="dTe-2b-BIA"/>
                                 <segue destination="j5u-Db-1Cj" kind="showDetail" identifier="measureSize" id="tbe-aL-hOg"/>
