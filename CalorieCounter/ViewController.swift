@@ -20,9 +20,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        if (imageView.image == nil) {
-            classificationLabel.text = "Please take a photo or choose from the album"
-        }
+        classificationLabel.text = "Please take a photo or choose from the album"
 
     }
     

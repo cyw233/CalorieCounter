@@ -8,7 +8,7 @@ This application using Augmented Reality (AR), so you need to run this app on IO
 
 - iPhone 6s and 6s Plus
 - iPhone 7 and 7 Plus
-- iPhone SE ($249 at Apple)
+- iPhone SE
 - iPhone 8 and 8 Plus
 - iPhone X
 - iPad Pro (the 10.5-inch model, 12.9-inch model and the older 9.7-inch model)
@@ -24,9 +24,8 @@ In terminal:
 
 3. pod install
 
-4. double click on the .xcworkspace file (**IMPORTANT!** not the project file!)
+4. open the **.xcworkspace** file (**ATTENTION!** not the .xcodeproj file!)
 
-5. click run in xcode
 
 # Reference
 * Apple 2017 , "Get Started witth ARKit", https://developer.apple.com/arkit/.
