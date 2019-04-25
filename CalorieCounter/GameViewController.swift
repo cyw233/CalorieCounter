@@ -201,13 +201,13 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
         return label
     }()
     
-    let trackingLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textColor = UIColor.black
-        label.text = "Tracking State:"
-        return label
-    }()
+//    let trackingLabel: UILabel = {
+//        let label = UILabel()
+//        label.font = UIFont.boldSystemFont(ofSize: 20)
+//        label.textColor = UIColor.black
+//        label.text = "Tracking State:"
+//        return label
+//    }()
     
     let distanceLabel: UILabel = {
         let label = UILabel()
@@ -259,11 +259,11 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
         view.addSubview(typeLabel)
         typeLabel.anchor(navBar.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 24, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 32)
         
-        view.addSubview(trackingLabel)
-        trackingLabel.anchor(typeLabel.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 24, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 32)
+//        view.addSubview(trackingLabel)
+//        trackingLabel.anchor(typeLabel.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 24, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 32)
         
         view.addSubview(distanceLabel)
-        distanceLabel.anchor(trackingLabel.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 24, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 32)
+        distanceLabel.anchor(typeLabel.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 24, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 32)
         
         view.addSubview(calorieLabel)
         calorieLabel.anchor(distanceLabel.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 24, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 32)
@@ -307,7 +307,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         DispatchQueue.main.async {
-            self.trackingLabel.text = "Tracking:" + self.getTrackigDescription()
+//            self.trackingLabel.text = "Tracking:" + self.getTrackigDescription()
         }
     }
     

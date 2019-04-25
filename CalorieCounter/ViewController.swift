@@ -10,12 +10,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     //MARK: Properties
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var classificationLabel: UILabel!
+    @IBOutlet weak var energyPer100g: UILabel!
     
     /*
      This value is passed by `ViewController` in `processImage(_ image: UIImage)`
      */
     var food: Food?
-//    var caloriesOfFood = ["miso_soup": 60.0] // 60Cal/100ml
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
 
         picker.dismiss(animated: true)
-        classificationLabel.text = "Analyzing Image…" 
+        classificationLabel.text = "Analyzing Image…"
+        self.energyPer100g.text = "Energy per 100g: calculating..."
         
         guard let uiImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
             else { fatalError("No image from image picker") }
@@ -65,17 +66,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             fatalError("Prediction failed!")
         }
         
+        
         let confidence = result.foodConfidence["\(result.classLabel)"]! * 100.0
         let converted = String(format: "%.2f", confidence)
         
         imageView.image = image
         let foodLabel = result.classLabel.replacingOccurrences(of: "_", with: " ")
-        classificationLabel.text = "\(foodLabel.capitalized) - \(converted) %"
-    
+        
         requestInfo(query: foodLabel) {(calories: Int) in
             self.food = Food(type: foodLabel.capitalized, calories: Double(calories))
+            self.classificationLabel.text = "\(foodLabel.capitalized) - \(converted) %"
+            self.energyPer100g.text = "Energy per 100g: \(calories) kcal"
         }
-        
+//        classificationLabel.text = "\(foodLabel.capitalized) - \(converted) %"
+    
+//        requestInfo(query: foodLabel) {(calories: Int) in
+//            self.food = Food(type: foodLabel.capitalized, calories: Double(calories))
+//        }
         
 //        if result.classLabel == "miso_soup" {
 //            food = Food(type: result.classLabel, calories: caloriesOfFood[result.classLabel]!)
@@ -148,6 +155,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if response.result.isSuccess {
                 let foodJSON: JSON = JSON(response.result.value!)
                 let ndbno = foodJSON["list"]["item"][0]["ndbno"].stringValue
+                print(ndbno)
                 
                 let nutrientParams: [String: String] = [
                     "format" : "json",
@@ -158,7 +166,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 Alamofire.request("https://api.nal.usda.gov/ndb/nutrients/", method: .get, parameters: nutrientParams).responseJSON { (response) in
                     if response.result.isSuccess {
                         let nutrientJSON: JSON = JSON(response.result.value!)
-                        print(nutrientJSON["report"]["foods"][0]["nutrients"][0]["gm"].intValue)
                         // Return calorie value per 100g of the food
                         completion(nutrientJSON["report"]["foods"][0]["nutrients"][0]["gm"].intValue)
                     }
