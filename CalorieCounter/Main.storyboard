@@ -77,7 +77,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Food " id="q8K-67-3yc">
-                        <barButtonItem key="rightBarButtonItem" title="See Calories" id="43n-Bg-cGb">
+                        <barButtonItem key="rightBarButtonItem" title="Total Calories" id="43n-Bg-cGb">
                             <connections>
                                 <action selector="measureSize:" destination="BYZ-38-t0r" id="dTe-2b-BIA"/>
                                 <segue destination="j5u-Db-1Cj" kind="showDetail" identifier="measureSize" id="tbe-aL-hOg"/>
@@ -135,6 +135,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="no_image" width="225" height="225"/>
+        <image name="no_image" width="1250" height="830"/>
     </resources>
 </document>

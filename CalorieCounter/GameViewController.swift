@@ -197,7 +197,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = UIColor.black
-        label.text = "Type: "
+        label.text = "Food Type: "
         return label
     }()
     
@@ -221,7 +221,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = UIColor.black
-        label.text = "Calories:"
+        label.text = "Total Calories:"
         return label
     }()
     
