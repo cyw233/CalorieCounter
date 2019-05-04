@@ -67,13 +67,35 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
     
     @objc func handlePlusButtonTapped() {
         print("Tapped on plus button")
+        if distances.count == 3 {
+            print(distances.count)
+            let maxDimensionExtendAlert = UIAlertController(title: "Error", message: "You have already measured three dimensions, please click the Calculate button to calculate the total calories!", preferredStyle: UIAlertController.Style.alert)
+            maxDimensionExtendAlert.addAction(UIAlertAction(title: "OK", style: .cancel) { (action:UIAlertAction!) in
+                print("OK")
+            })
+            self.present(maxDimensionExtendAlert, animated: true)
+        }
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         arView.addGestureRecognizer(tapGestureRecognizer)
         addDimensionalDistance()
     }
     
     func addDimensionalDistance() {
-        distanceLabel.text = "Distance:"
+//        distanceLabel.text = "Distance:"
+        var distancesString = ""
+        if distances.count < 3 {
+            for dist in distances {
+                distancesString = distancesString + String(format: "%.2f", dist) + "m, "
+            }
+        } else {
+            for dist in distances {
+                distancesString = distancesString + String(format: "%.2f", dist) + "m, "
+            }
+            distancesString = String(distancesString.dropLast(2)) + "."
+        }
+
+        distanceLabel.text = "Distances: " + distancesString
         startingPositionNode?.removeFromParentNode()
         endingPositionNode?.removeFromParentNode()
         startingPositionNode = nil
@@ -83,7 +105,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
         if startingPositionNode != nil && endingPositionNode != nil {
-            let addDimensionalDistanceAlert = UIAlertController(title: "Error", message: "You have tapped twice! Please click on Add Button again!", preferredStyle: UIAlertController.Style.alert)
+            let addDimensionalDistanceAlert = UIAlertController(title: "Error", message: "You have already tapped twice! Please click the + button to start a new measurement!", preferredStyle: UIAlertController.Style.alert)
             addDimensionalDistanceAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction!) in
                 print("Cancel")
             })
@@ -102,8 +124,21 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
                     guard let xDistance = Service.distance3(fromStartingPositionNode: startingPositionNode, onView: arView, cameraRelativePosition: cameraRelativePosition)?.x else {return}
                     guard let yDistance = Service.distance3(fromStartingPositionNode: startingPositionNode, onView: arView, cameraRelativePosition: cameraRelativePosition)?.y else {return}
                     guard let zDistance = Service.distance3(fromStartingPositionNode: startingPositionNode, onView: arView, cameraRelativePosition: cameraRelativePosition)?.z else {return}
-                    distanceLabel.text = String(format: "Distance: %.2f", Service.distance(x: xDistance, y: yDistance, z: zDistance)) + "m"
+//                    distanceLabel.text = String(format: "Distance: %.2f", Service.distance(x: xDistance, y: yDistance, z: zDistance)) + "m"
                     distances.append( Service.distance(x: xDistance, y: yDistance, z: zDistance) )
+                    var distancesString = ""
+                    if distances.count < 3 {
+                        for dist in distances {
+                            distancesString = distancesString + String(format: "%.2f", dist) + "m, "
+                        }
+                    } else {
+                        for dist in distances {
+                            distancesString = distancesString + String(format: "%.2f", dist) + "m, "
+                        }
+                        distancesString = String(distancesString.dropLast(2)) + "."
+                    }
+                    distanceLabel.text = "Distances: " + distancesString
+                    
                 } else if startingPositionNode == nil && endingPositionNode == nil {
                     let sphere = SCNNode(geometry: SCNSphere(radius: 0.002))
                     sphere.geometry?.firstMaterial?.diffuse.contents = UIColor.purple
@@ -138,6 +173,19 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
             self.present(nilDistanceAlert, animated: true)
         } else {
             distances.remove(at: distances.endIndex-1)
+            
+            var distancesString = ""
+            if distances.count < 3 {
+                for dist in distances {
+                    distancesString = distancesString + String(format: "%.2f", dist) + "m, "
+                }
+            } else {
+                for dist in distances {
+                    distancesString = distancesString + String(format: "%.2f", dist) + "m, "
+                }
+                distancesString = String(distancesString.dropLast(2)) + "."
+            }
+            distanceLabel.text = "Distances: " + distancesString
         }
     }
     
@@ -184,10 +232,9 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
             })
             self.present(maxDimensionExtendAlert, animated: true)
         } else {
-            print(distances)
             calorieCount = distances.reduce(1, { x, y in x * y}) * Float(caloriesPerUnit!)
             print(calorieCount)
-            calorieLabel.text = String(format: "Calories: %.2f", calorieCount * 10000)
+            calorieLabel.text = String(format: "Total Calories: %.2f", calorieCount * 10000) + " kcal"
             distances.removeAll()
         }
     }
@@ -208,12 +255,12 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
 //        label.text = "Tracking State:"
 //        return label
 //    }()
-    
+
     let distanceLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = UIColor.black
-        label.text = "Distance:"
+        label.text = "Distances:"
         return label
     }()
     
@@ -241,7 +288,7 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
         self.view.addSubview(navBar)
         let navItem = UINavigationItem(title: "Measure Size")
         let cancelItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target: nil, action: #selector(handleCancelButtonTapped))
-        let checkItem = UIBarButtonItem(title: "calculate", style: UIBarButtonItem.Style.plain, target: nil, action: #selector(handleCheckButtonTapped))
+        let checkItem = UIBarButtonItem(title: "Calculate", style: UIBarButtonItem.Style.plain, target: nil, action: #selector(handleCheckButtonTapped))
         navItem.leftBarButtonItem = cancelItem
         navItem.rightBarButtonItem = checkItem
         navBar.setItems([navItem], animated: false)
