@@ -21,10 +21,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mf0-ej-OWb" customClass="OverlayView" customModule="CalorieCounter" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="503"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="SxX-QA-fjD">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="563"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_image" translatesAutoresizingMaskIntoConstraints="NO" id="ikj-rf-AXs">
+                                    <imageView userInteractionEnabled="NO" alpha="0.59999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no_image" translatesAutoresizingMaskIntoConstraints="NO" id="ikj-rf-AXs">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="503"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zmt-pk-Cvs">
@@ -88,6 +93,7 @@
                         <outlet property="classificationLabel" destination="zmt-pk-Cvs" id="L2E-3X-O0L"/>
                         <outlet property="energyPer100g" destination="QM5-BS-crw" id="Peu-OD-EMd"/>
                         <outlet property="imageView" destination="ikj-rf-AXs" id="MjC-cW-qE8"/>
+                        <outlet property="overlayView" destination="Mf0-ej-OWb" id="s6T-gW-0zI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

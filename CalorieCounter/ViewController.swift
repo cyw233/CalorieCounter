@@ -11,11 +11,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var classificationLabel: UILabel!
     @IBOutlet weak var energyPer100g: UILabel!
+
+    @IBOutlet weak var overlayView: OverlayView!
     
     /*
      This value is passed by `ViewController` in `processImage(_ image: UIImage)`
      */
     var food: Food?
+    
+    // MARK: Controllers that manage functionality
+    private var result: Result?
+    private let modelDataHandler: ModelDataHandler? = ModelDataHandler(modelFileName: "detect", labelsFileName: "labelmap", labelsFileExtension: "txt")
+    private var inferenceViewController: InferenceViewController?
+    private let edgeOffset: CGFloat = 2.0
+    private let labelOffset: CGFloat = 10.0
+    private let displayFont = UIFont.systemFont(ofSize: 14.0, weight: .medium)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,24 +80,110 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let converted = String(format: "%.2f", confidence)
         
         imageView.image = image
-        let foodLabel = result.classLabel.replacingOccurrences(of: "_", with: " ")
         
+        // runModel
+        guard let modelPixelBuffer = image.resize(to: CGSize(width: 300, height: 300))?.to32BGRAPixelBuffer() else {
+           fatalError("Scaling or converting to 32BGRA pixel buffer failed!")
+        }
+        runModel(onPixelBuffer: modelPixelBuffer)
+        
+        // Optimize food label and reqeust nutrient info
+        let foodLabel = result.classLabel.replacingOccurrences(of: "_", with: " ")
         requestInfo(query: foodLabel) {(calories: Int) in
             self.food = Food(type: foodLabel.capitalized, calories: Double(calories))
             self.classificationLabel.text = "\(foodLabel.capitalized) - \(converted) %"
             self.energyPer100g.text = "Energy per 100g: \(calories) kcal"
         }
-//        classificationLabel.text = "\(foodLabel.capitalized) - \(converted) %"
+    }
     
-//        requestInfo(query: foodLabel) {(calories: Int) in
-//            self.food = Food(type: foodLabel.capitalized, calories: Double(calories))
-//        }
+    /** This method runs the live camera pixelBuffer through tensorFlow to get the result.
+     */
+    @objc  func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
         
-//        if result.classLabel == "miso_soup" {
-//            food = Food(type: result.classLabel, calories: caloriesOfFood[result.classLabel]!)
-//        } else {
-//            food = Food(type: result.classLabel, calories: 0.0)
-//        }
+        self.modelDataHandler?.set(numberOfThreads: 3)
+        result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
+        
+        guard let displayResult = result else {
+            return
+        }
+        print(displayResult)
+        
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        
+        DispatchQueue.main.async {
+            
+            // Display results by handing off to the InferenceViewController
+            self.inferenceViewController?.resolution = CGSize(width: width, height: height)
+            
+            var inferenceTime: Double = 0
+            if let resultInferenceTime = self.result?.inferenceTime {
+                inferenceTime = resultInferenceTime
+            }
+            self.inferenceViewController?.inferenceTime = inferenceTime
+            self.inferenceViewController?.tableView.reloadData()
+            
+            // Draws the bounding boxes and displays class names and confidence scores.
+            self.drawAfterPerformingCalculations(onInferences: displayResult.inferences, withImageSize: CGSize(width: CGFloat(width), height: CGFloat(height)))
+        }
+    }
+    
+    /**
+     This method takes the results, translates the bounding box rects to the current view, draws the bounding boxes, classNames and confidence scores of inferences.
+     */
+    func drawAfterPerformingCalculations(onInferences inferences: [Inference], withImageSize imageSize:CGSize) {
+
+        self.overlayView.objectOverlays = []
+        self.overlayView.setNeedsDisplay()
+
+        guard !inferences.isEmpty else {
+            return
+        }
+
+        var objectOverlays: [ObjectOverlay] = []
+
+        for inference in inferences {
+
+            // Translates bounding box rect to current view.
+            var convertedRect = inference.rect.applying(CGAffineTransform(scaleX: self.overlayView.bounds.size.width / imageSize.width, y: self.overlayView.bounds.size.height / imageSize.height))
+
+            if convertedRect.origin.x < 0 {
+                convertedRect.origin.x = self.edgeOffset
+            }
+
+            if convertedRect.origin.y < 0 {
+                convertedRect.origin.y = self.edgeOffset
+            }
+
+            if convertedRect.maxY > self.overlayView.bounds.maxY {
+                convertedRect.size.height = self.overlayView.bounds.maxY - convertedRect.origin.y - self.edgeOffset
+            }
+
+            if convertedRect.maxX > self.overlayView.bounds.maxX {
+                convertedRect.size.width = self.overlayView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
+            }
+
+            let confidenceValue = Int(inference.confidence * 100.0)
+            let string = "\(inference.className)  (\(confidenceValue)%)"
+
+            let size = string.size(usingFont: self.displayFont)
+
+            let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
+
+            objectOverlays.append(objectOverlay)
+        }
+
+        // Hands off drawing to the OverlayView
+        self.draw(objectOverlays: objectOverlays)
+
+    }
+
+    /** Calls methods to update overlay view with detected bounding boxes and class names.
+     */
+    func draw(objectOverlays: [ObjectOverlay]) {
+        print("drawing...!!!")
+        self.overlayView.objectOverlays = objectOverlays
+        self.overlayView.setNeedsDisplay()
     }
     
     //MARK: - Navigation

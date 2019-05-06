@@ -19,7 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //
 //    let gameViewController = GameViewController()
 //    window?.rootViewController = gameViewController
-//    UIApplication.shared.isIdleTimerDisabled = true 
+//    UIApplication.shared.isIdleTimerDisabled = true
+    UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+    // Sets shadow (line below the bar) to a blank image
+    UINavigationBar.appearance().shadowImage = UIImage()
+    // Sets the translucent background color
+    UINavigationBar.appearance().backgroundColor = .clear
+    // Set translucent. (Default value is already true, so this can be removed if desired.)
+    UINavigationBar.appearance().isTranslucent = true
+    
     return true
   }
  

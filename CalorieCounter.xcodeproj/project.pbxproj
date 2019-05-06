@@ -13,6 +13,17 @@
 		0495929420A41737000BD413 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0495929020A41737000BD413 /* Food.swift */; };
 		0495929520A41737000BD413 /* Food101.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0495929120A41737000BD413 /* Food101.mlmodel */; };
 		0495929620A41737000BD413 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0495929220A41737000BD413 /* Main.storyboard */; };
+		AC59058D227EC541008A1F2B /* ModelDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC59058C227EC541008A1F2B /* ModelDataHandler.swift */; };
+		AC590593227EC723008A1F2B /* labelmap.txt in Resources */ = {isa = PBXBuildFile; fileRef = AC590592227EC723008A1F2B /* labelmap.txt */; };
+		AC590595227EC732008A1F2B /* InferenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC590594227EC732008A1F2B /* InferenceViewController.swift */; };
+		AC590599227EC78C008A1F2B /* CurvedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC590597227EC78C008A1F2B /* CurvedView.swift */; };
+		AC59059A227EC78C008A1F2B /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC590598227EC78C008A1F2B /* OverlayView.swift */; };
+		AC59059E227ECF9E008A1F2B /* TfliteWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = AC59059C227ECF9E008A1F2B /* TfliteWrapper.mm */; };
+		AC5905A3227EE0AC008A1F2B /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5905A0227EE0AC008A1F2B /* CVPixelBufferExtension.swift */; };
+		AC5905A4227EE0AC008A1F2B /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5905A1227EE0AC008A1F2B /* StringExtension.swift */; };
+		AC5905A5227EE0AC008A1F2B /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5905A2227EE0AC008A1F2B /* UIColorExtension.swift */; };
+		AC5905A8227EE142008A1F2B /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5905A7227EE142008A1F2B /* InfoCell.swift */; };
+		AC5905AA227EEBB4008A1F2B /* detect.tflite in Resources */ = {isa = PBXBuildFile; fileRef = AC590589227EC505008A1F2B /* detect.tflite */; };
 		C97DE8C52004B1E1002F0E38 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97DE8C42004B1E1002F0E38 /* AppDelegate.swift */; };
 		C97DE8CC2004B1E1002F0E38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C97DE8CB2004B1E1002F0E38 /* Assets.xcassets */; };
 		C97DE8CF2004B1E1002F0E38 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97DE8CD2004B1E1002F0E38 /* LaunchScreen.storyboard */; };
@@ -28,6 +39,19 @@
 		0495929120A41737000BD413 /* Food101.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = Food101.mlmodel; path = CalorieCounter/Food101.mlmodel; sourceTree = SOURCE_ROOT; };
 		0495929220A41737000BD413 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = CalorieCounter/Main.storyboard; sourceTree = SOURCE_ROOT; };
 		07871AAD57E57084BB276BC5 /* Pods-CalorieCounter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CalorieCounter.release.xcconfig"; path = "Pods/Target Support Files/Pods-CalorieCounter/Pods-CalorieCounter.release.xcconfig"; sourceTree = "<group>"; };
+		AC590589227EC505008A1F2B /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = detect.tflite; sourceTree = "<group>"; };
+		AC59058C227EC541008A1F2B /* ModelDataHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelDataHandler.swift; sourceTree = "<group>"; };
+		AC590592227EC723008A1F2B /* labelmap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labelmap.txt; sourceTree = "<group>"; };
+		AC590594227EC732008A1F2B /* InferenceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InferenceViewController.swift; sourceTree = "<group>"; };
+		AC590597227EC78C008A1F2B /* CurvedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurvedView.swift; sourceTree = "<group>"; };
+		AC590598227EC78C008A1F2B /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
+		AC59059B227ECF9D008A1F2B /* CalorieCounter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CalorieCounter-Bridging-Header.h"; sourceTree = "<group>"; };
+		AC59059C227ECF9E008A1F2B /* TfliteWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TfliteWrapper.mm; sourceTree = "<group>"; };
+		AC59059D227ECF9E008A1F2B /* TfliteWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TfliteWrapper.h; sourceTree = "<group>"; };
+		AC5905A0227EE0AC008A1F2B /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CVPixelBufferExtension.swift; sourceTree = "<group>"; };
+		AC5905A1227EE0AC008A1F2B /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		AC5905A2227EE0AC008A1F2B /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		AC5905A7227EE142008A1F2B /* InfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		C97DE8C12004B1E1002F0E38 /* CalorieCounter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalorieCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C97DE8C42004B1E1002F0E38 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C97DE8CB2004B1E1002F0E38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -59,6 +83,60 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		AC590588227EC4B8008A1F2B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AC590592227EC723008A1F2B /* labelmap.txt */,
+				AC590589227EC505008A1F2B /* detect.tflite */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AC59058A227EC517008A1F2B /* ModelDataHandler */ = {
+			isa = PBXGroup;
+			children = (
+				AC59058C227EC541008A1F2B /* ModelDataHandler.swift */,
+			);
+			path = ModelDataHandler;
+			sourceTree = "<group>";
+		};
+		AC59058B227EC51E008A1F2B /* TfliteWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				AC59059D227ECF9E008A1F2B /* TfliteWrapper.h */,
+				AC59059C227ECF9E008A1F2B /* TfliteWrapper.mm */,
+				AC59059B227ECF9D008A1F2B /* CalorieCounter-Bridging-Header.h */,
+			);
+			path = TfliteWrapper;
+			sourceTree = "<group>";
+		};
+		AC590596227EC779008A1F2B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AC590597227EC78C008A1F2B /* CurvedView.swift */,
+				AC590598227EC78C008A1F2B /* OverlayView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AC59059F227EE09B008A1F2B /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				AC5905A0227EE0AC008A1F2B /* CVPixelBufferExtension.swift */,
+				AC5905A1227EE0AC008A1F2B /* StringExtension.swift */,
+				AC5905A2227EE0AC008A1F2B /* UIColorExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		AC5905A6227EE12F008A1F2B /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				AC5905A7227EE142008A1F2B /* InfoCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		C97DE8B82004B1E1002F0E38 = {
 			isa = PBXGroup;
 			children = (
@@ -80,10 +158,17 @@
 		C97DE8C32004B1E1002F0E38 /* CalorieCounter */ = {
 			isa = PBXGroup;
 			children = (
+				0495928F20A41737000BD413 /* ViewController.swift */,
+				AC590594227EC732008A1F2B /* InferenceViewController.swift */,
+				AC5905A6227EE12F008A1F2B /* Cells */,
+				AC59059F227EE09B008A1F2B /* Extension */,
+				AC590596227EC779008A1F2B /* Views */,
+				AC59058B227EC51E008A1F2B /* TfliteWrapper */,
+				AC59058A227EC517008A1F2B /* ModelDataHandler */,
+				AC590588227EC4B8008A1F2B /* Model */,
 				0495929020A41737000BD413 /* Food.swift */,
 				0495929120A41737000BD413 /* Food101.mlmodel */,
 				0495929220A41737000BD413 /* Main.storyboard */,
-				0495928F20A41737000BD413 /* ViewController.swift */,
 				C97DE8C42004B1E1002F0E38 /* AppDelegate.swift */,
 				C97DE8CB2004B1E1002F0E38 /* Assets.xcassets */,
 				C97DE8CD2004B1E1002F0E38 /* LaunchScreen.storyboard */,
@@ -137,7 +222,7 @@
 				TargetAttributes = {
 					C97DE8C02004B1E1002F0E38 = {
 						CreatedOnToolsVersion = 9.2;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -165,6 +250,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC5905AA227EEBB4008A1F2B /* detect.tflite in Resources */,
+				AC590593227EC723008A1F2B /* labelmap.txt in Resources */,
 				0495929620A41737000BD413 /* Main.storyboard in Resources */,
 				C97DE8CF2004B1E1002F0E38 /* LaunchScreen.storyboard in Resources */,
 				C97DE8CC2004B1E1002F0E38 /* Assets.xcassets in Resources */,
@@ -222,12 +309,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				0495929520A41737000BD413 /* Food101.mlmodel in Sources */,
+				AC5905A3227EE0AC008A1F2B /* CVPixelBufferExtension.swift in Sources */,
+				AC5905A5227EE0AC008A1F2B /* UIColorExtension.swift in Sources */,
 				0495929320A41737000BD413 /* ViewController.swift in Sources */,
+				AC59058D227EC541008A1F2B /* ModelDataHandler.swift in Sources */,
+				AC5905A8227EE142008A1F2B /* InfoCell.swift in Sources */,
 				0410606F20A161890089AE4A /* Extension.swift in Sources */,
 				041C9CA820A1858B0037EC11 /* Service.swift in Sources */,
+				AC59059E227ECF9E008A1F2B /* TfliteWrapper.mm in Sources */,
 				C97DE8D72004B326002F0E38 /* GameViewController.swift in Sources */,
+				AC5905A4227EE0AC008A1F2B /* StringExtension.swift in Sources */,
+				AC590595227EC732008A1F2B /* InferenceViewController.swift in Sources */,
 				C97DE8C52004B1E1002F0E38 /* AppDelegate.swift in Sources */,
 				0495929420A41737000BD413 /* Food.swift in Sources */,
+				AC59059A227EC78C008A1F2B /* OverlayView.swift in Sources */,
+				AC590599227EC78C008A1F2B /* CurvedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,12 +457,15 @@
 			baseConfigurationReference = F902CF11612178F30509A9AB /* Pods-CalorieCounter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MC7P59WZ59;
 				INFOPLIST_FILE = CalorieCounter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chenyangw233.CalorieCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "CalorieCounter/TfliteWrapper/CalorieCounter-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -377,12 +476,14 @@
 			baseConfigurationReference = 07871AAD57E57084BB276BC5 /* Pods-CalorieCounter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MC7P59WZ59;
 				INFOPLIST_FILE = CalorieCounter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chenyangw233.CalorieCounter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "CalorieCounter/TfliteWrapper/CalorieCounter-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

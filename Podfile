@@ -9,5 +9,6 @@ target 'CalorieCounter' do
   pod 'LBTAComponents'
   pod 'SwiftyJSON'
   pod 'Alamofire'
+  pod 'TensorFlowLite'
   
 end
