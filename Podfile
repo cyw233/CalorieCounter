@@ -10,5 +10,6 @@ target 'CalorieCounter' do
   pod 'SwiftyJSON'
   pod 'Alamofire'
   pod 'TensorFlowLite'
+  pod 'PopupDialog', '~> 1.1'
   
 end

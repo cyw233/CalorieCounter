@@ -5,19 +5,22 @@ import ImageIO
 import os.log
 import Alamofire
 import SwiftyJSON
+import PopupDialog
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     //MARK: Properties
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var classificationLabel: UILabel!
-    @IBOutlet weak var energyPer100g: UILabel!
-
+    @IBOutlet weak var classLabelView: UITextView!
+    
+    
     @IBOutlet weak var overlayView: OverlayView!
     
     /*
      This value is passed by `ViewController` in `processImage(_ image: UIImage)`
      */
     var food: Food?
+    var foodTypes = [Food]()
     
     // MARK: Controllers that manage functionality
     private var result: Result?
@@ -26,16 +29,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     private let edgeOffset: CGFloat = 2.0
     private let labelOffset: CGFloat = 10.0
     private let displayFont = UIFont.systemFont(ofSize: 14.0, weight: .medium)
-
+    
+    let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        classificationLabel.text = "Please take a photo or choose from the album"
 
+        // Do any additional setup after loading the view, typically from a nib.
+        classLabelView.text = "Please take a photo or choose from the album"
     }
     
     @IBAction func takePicture(_ sender: Any) {
+        foodTypes.removeAll()
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .camera
@@ -44,6 +49,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func chooseImage(_ sender: Any) {
+        foodTypes.removeAll()
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .savedPhotosAlbum
@@ -55,12 +61,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
 
         picker.dismiss(animated: true)
-        classificationLabel.text = "Analyzing Image…"
-        self.energyPer100g.text = "Energy per 100g: calculating..."
+        classLabelView.text = "Analyzing Image..."
+//        classificationLabel.text = "Analyzing Image…"
         
         guard let uiImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
             else { fatalError("No image from image picker") }
-        processImage(uiImage)
+        
+        imageView.image = uiImage
+        
+        // runModelnil
+        let reziedImage = uiImage.resize(to: CGSize(width: 300, height: 300))!
+        guard let modelPixelBuffer = reziedImage.to32BGRAPixelBuffer() else {
+            fatalError("Scaling or converting to 32BGRA pixel buffer failed!")
+        }
+        runModel(onPixelBuffer: modelPixelBuffer, uiImage: uiImage)
+//        processImage(uiImage)
     }
     
     func processImage(_ image: UIImage) {
@@ -78,27 +93,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         let confidence = result.foodConfidence["\(result.classLabel)"]! * 100.0
         let converted = String(format: "%.2f", confidence)
-        
-        imageView.image = image
-        
-        // runModel
-        guard let modelPixelBuffer = image.resize(to: CGSize(width: 300, height: 300))?.to32BGRAPixelBuffer() else {
-           fatalError("Scaling or converting to 32BGRA pixel buffer failed!")
-        }
-        runModel(onPixelBuffer: modelPixelBuffer)
+    
         
         // Optimize food label and reqeust nutrient info
         let foodLabel = result.classLabel.replacingOccurrences(of: "_", with: " ")
         requestInfo(query: foodLabel) {(calories: Int) in
             self.food = Food(type: foodLabel.capitalized, calories: Double(calories))
-            self.classificationLabel.text = "\(foodLabel.capitalized) - \(converted) %"
-            self.energyPer100g.text = "Energy per 100g: \(calories) kcal"
+            self.foodTypes.append(Food(type: foodLabel.capitalized, calories: Double(calories))!)
+            
+//            self.classificationLabel.text = "\(foodLabel.capitalized) - \(converted) % - \(calories) kcal/100g \n"
+            if (self.classLabelView.text == "Analyzing Image...") {
+                self.classLabelView.text = ""
+            }
+            self.classLabelView.text += "\(foodLabel.capitalized) - \(converted) % - \(calories) kcal/100g \n"
+//            self.energyPer100g.text = "Energy per 100g: \(calories) kcal"
         }
     }
     
     /** This method runs the live camera pixelBuffer through tensorFlow to get the result.
      */
-    @objc  func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer) {
+    @objc  func runModel(onPixelBuffer pixelBuffer: CVPixelBuffer, uiImage inputImage: UIImage) {
         
         self.modelDataHandler?.set(numberOfThreads: 3)
         result = self.modelDataHandler?.runModel(onFrame: pixelBuffer)
@@ -106,7 +120,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         guard let displayResult = result else {
             return
         }
-        print(displayResult)
         
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
@@ -124,14 +137,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.inferenceViewController?.tableView.reloadData()
             
             // Draws the bounding boxes and displays class names and confidence scores.
-            self.drawAfterPerformingCalculations(onInferences: displayResult.inferences, withImageSize: CGSize(width: CGFloat(width), height: CGFloat(height)))
+            self.drawAfterPerformingCalculations(onInferences: displayResult.inferences, withImageSize: CGSize(width: CGFloat(width), height: CGFloat(height)), inputImage: inputImage)
         }
     }
     
     /**
      This method takes the results, translates the bounding box rects to the current view, draws the bounding boxes, classNames and confidence scores of inferences.
      */
-    func drawAfterPerformingCalculations(onInferences inferences: [Inference], withImageSize imageSize:CGSize) {
+    func drawAfterPerformingCalculations(onInferences inferences: [Inference], withImageSize imageSize:CGSize, inputImage inputImg: UIImage) {
 
         self.overlayView.objectOverlays = []
         self.overlayView.setNeedsDisplay()
@@ -143,9 +156,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         var objectOverlays: [ObjectOverlay] = []
 
         for inference in inferences {
-
             // Translates bounding box rect to current view.
             var convertedRect = inference.rect.applying(CGAffineTransform(scaleX: self.overlayView.bounds.size.width / imageSize.width, y: self.overlayView.bounds.size.height / imageSize.height))
+
 
             if convertedRect.origin.x < 0 {
                 convertedRect.origin.x = self.edgeOffset
@@ -162,15 +175,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             if convertedRect.maxX > self.overlayView.bounds.maxX {
                 convertedRect.size.width = self.overlayView.bounds.maxX - convertedRect.origin.x - self.edgeOffset
             }
-
-            let confidenceValue = Int(inference.confidence * 100.0)
-            let string = "\(inference.className)  (\(confidenceValue)%)"
-
+            
+            
+//            let confidenceValue = Int(inference.confidence * 100.0)
+//            let string = "\(inference.className)  (\(confidenceValue)%)"
+            let string = ""
+            
             let size = string.size(usingFont: self.displayFont)
 
             let objectOverlay = ObjectOverlay(name: string, borderRect: convertedRect, nameStringSize: size, color: inference.displayColor, font: self.displayFont)
 
             objectOverlays.append(objectOverlay)
+            
+            let croppedImage = cropImage(inputImage: inputImg, cropRect: convertedRect)!
+            processImage(croppedImage)
         }
 
         // Hands off drawing to the OverlayView
@@ -185,6 +203,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.overlayView.objectOverlays = objectOverlays
         self.overlayView.setNeedsDisplay()
     }
+    
+    func cropImage(inputImage: UIImage, cropRect: CGRect) -> UIImage? {
+        let resizedImg = inputImage.resize(to: CGSize(width: self.overlayView.bounds.width, height: self.overlayView.bounds.height))!
+        
+        let cropZone = CGRect(x: cropRect.origin.x * 2,
+                              y: cropRect.origin.y * 2,
+                              width: cropRect.size.width * 2,
+                              height: cropRect.size.height * 2)
+        
+        guard let cutImageRef: CGImage = resizedImg.cgImage?.cropping(to: cropZone) else {
+            return nil
+        }
+        
+        let croppedImage: UIImage = UIImage(cgImage: cutImageRef)
+        return croppedImage
+    }
+    
     
     //MARK: - Navigation
     
@@ -202,17 +237,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 os_log("Food is set. Continue to calculate calories", log: OSLog.default, type: .debug)
                 return true
             }
-//            else if caloriesOfFood.keys.contains((food?.type)!) {
-//                os_log("Food is set. Continue to calculate calories", log: OSLog.default, type: .debug)
-//                return true
-//            } else {
-//                let notInDBAlert = UIAlertController(title: "Alert", message: "The information has not been set for this type!", preferredStyle: .alert)
-//                notInDBAlert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-//                    NSLog("The \"OK\" alert occured.")
-//                }))
-//                self.present(notInDBAlert, animated: true, completion: nil)
-//                return false
-//            }
         }
         // by default, transition
         return true
@@ -222,12 +246,46 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.performSegue(withIdentifier: "measureSize", sender: food)
     }
     
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "measureSize" {
             let nextScene = segue.destination as! GameViewController
             nextScene.food = food
         }
     }
+    
+    @IBAction func chooseFood(_ sender: UIBarButtonItem) {
+        // Prepare the popup assets
+        let title = "Please select a food type"
+        let message = "You must select a food type to continue to use AR to measure food size"
+        let image = UIImage(named: "pexels-photo-103290")
+        
+        // Create the dialog
+        let popup = PopupDialog(title: title, message: message, image: image)
+        
+        var buttonList = [DefaultButton]()
+        // Create button
+        for food in foodTypes {
+            let button = DefaultButton(title: food.type, height: 60) {
+                self.food = food
+                self.performSegue(withIdentifier: "measureSize", sender: self.food)
+            }
+            buttonList.append(button)
+        }
+        
+        let cancelButton = CancelButton(title: "Cancel") {
+            print("You canceled the car dialog.")
+        }
+        
+        // Add buttons to dialog
+        // Alternatively, you can use popup.addButton(buttonOne) to add a single button
+        popup.addButtons(buttonList)
+        popup.addButtons([cancelButton])
+        
+        // Present dialog
+        self.present(popup, animated: true, completion: nil)
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

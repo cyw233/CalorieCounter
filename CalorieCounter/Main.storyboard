@@ -62,13 +62,13 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QM5-BS-crw">
-                                <rect key="frame" x="0.0" y="539" width="375" height="52"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3Rx-PT-PkO" userLabel="Class Label View">
+                                <rect key="frame" x="0.0" y="511" width="375" height="112"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -82,16 +82,23 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Food " id="q8K-67-3yc">
-                        <barButtonItem key="rightBarButtonItem" title="Total Calories" id="43n-Bg-cGb">
+                        <barButtonItem key="leftBarButtonItem" title="." id="43n-Bg-cGb">
+                            <color key="tintColor" red="0.51871889920000003" green="0.93731254340000003" blue="0.54094761680000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <connections>
                                 <action selector="measureSize:" destination="BYZ-38-t0r" id="dTe-2b-BIA"/>
                                 <segue destination="j5u-Db-1Cj" kind="showDetail" identifier="measureSize" id="tbe-aL-hOg"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Total Calories" id="yJw-G0-wzn" userLabel="Total Calories">
+                            <color key="tintColor" red="0.30704862649999998" green="0.1132136458" blue="0.40056553169999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            <connections>
+                                <action selector="chooseFood:" destination="BYZ-38-t0r" id="KIy-fT-JHb"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="classLabelView" destination="3Rx-PT-PkO" id="Tkx-hE-P6T"/>
                         <outlet property="classificationLabel" destination="zmt-pk-Cvs" id="L2E-3X-O0L"/>
-                        <outlet property="energyPer100g" destination="QM5-BS-crw" id="Peu-OD-EMd"/>
                         <outlet property="imageView" destination="ikj-rf-AXs" id="MjC-cW-qE8"/>
                         <outlet property="overlayView" destination="Mf0-ej-OWb" id="s6T-gW-0zI"/>
                     </connections>
