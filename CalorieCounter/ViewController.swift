@@ -30,11 +30,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     private let labelOffset: CGFloat = 10.0
     private let displayFont = UIFont.systemFont(ofSize: 14.0, weight: .medium)
     
-    let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        imageView.layer.zPosition = 1
+        overlayView.layer.zPosition = 5
         // Do any additional setup after loading the view, typically from a nib.
         classLabelView.text = "Please take a photo or choose from the album"
     }
