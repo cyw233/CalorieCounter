@@ -48,7 +48,7 @@ class ModelDataHandler: NSObject {
   let threaCountLimit = 10
   let threshold: Double = 0.5
   private let colorStrideValue = 10
-  private let colors = [UIColor.red, UIColor(displayP3Red: 90.0/255.0, green: 200.0/255.0, blue: 250.0/255.0, alpha: 1.0), UIColor.green, UIColor.orange, UIColor.blue, UIColor.purple, UIColor.magenta, UIColor.yellow, UIColor.darkGray, UIColor.brown]
+  private let colors = [UIColor.red, UIColor(displayP3Red: 90.0/255.0, green: 200.0/255.0, blue: 250.0/255.0, alpha: 1.0), UIColor.green, UIColor.orange, UIColor.blue, UIColor.purple, UIColor.magenta, UIColor.yellow, UIColor.darkGray, UIColor.brown, UIColor.cyan]
 
 
   // MARK: Instance Variables
@@ -233,7 +233,8 @@ class ModelDataHandler: NSObject {
   private func colorForClass(withIndex index: Int) -> UIColor {
 
     // We have a set of colors and the depending upon a stride, it assigns variations to of the base colors to each object based on it's index.
-    let baseColor = colors[index % colors.count]
+//    let baseColor = colors[index % colors.count]
+    let baseColor = colors[Int.random(in: 0..<colors.count)]
 
     var colorToAssign = baseColor
 

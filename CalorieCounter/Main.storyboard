@@ -90,7 +90,6 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Total Calories" id="yJw-G0-wzn" userLabel="Total Calories">
-                            <color key="tintColor" red="0.30704862649999998" green="0.1132136458" blue="0.40056553169999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <connections>
                                 <action selector="chooseFood:" destination="BYZ-38-t0r" id="KIy-fT-JHb"/>
                             </connections>
