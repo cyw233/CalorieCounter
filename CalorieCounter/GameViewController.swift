@@ -331,7 +331,8 @@ class GameViewController: UIViewController, ARSCNViewDelegate, UINavigationContr
         caloriesPerUnit = food!.calories
         configuration.planeDetection = [.horizontal, .vertical]
         arView.session.run(configuration, options: [])
-        arView.debugOptions = [SCNDebugOptions.showFeaturePoints, SCNDebugOptions.showWorldOrigin]
+//        arView.debugOptions = [SCNDebugOptions.showFeaturePoints, SCNDebugOptions.showWorldOrigin]
+        arView.debugOptions = [SCNDebugOptions.showFeaturePoints]
         arView.autoenablesDefaultLighting = true
         arView.delegate = self
     }

@@ -34,9 +34,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Do any additional setup after loading the view, typically from a nib.
         imageView.layer.zPosition = 1
         overlayView.layer.zPosition = 5
-        // Do any additional setup after loading the view, typically from a nib.
         classLabelView.isEditable = false
         classLabelView.text = "Please take a photo or choose from the album"
     }
@@ -340,8 +340,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.present(popup, animated: true, completion: nil)
         } else {
             // Prepare the popup assets
-            let title = "Please select a food type"
-            let message = "You must select a food type to continue to use AR to measure food size"
+            let title = "Please Select a Food Type"
+            let message = "You need to select a food type to continue to use AR to measure food size"
             let image = UIImage(named: "pexels-photo-103290")
             
             // Create the dialog
