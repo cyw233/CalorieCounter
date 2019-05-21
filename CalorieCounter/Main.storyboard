@@ -55,7 +55,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="YqE-gP-kss"/>
-                                    <barButtonItem title="Choose Image" id="SpQ-9j-DaF">
+                                    <barButtonItem title="Photos" id="SpQ-9j-DaF">
                                         <connections>
                                             <action selector="chooseImage:" destination="BYZ-38-t0r" id="NuC-Lg-Y2n"/>
                                         </connections>

@@ -163,7 +163,7 @@ class ModelDataHandler: NSObject {
 
     var resultsArray: [Inference] = []
     for i in 0...outputCount - 1 {
-
+        
       let score = Double(outputScores[i])
 
       // Filters results with confidence < threshold.
@@ -174,6 +174,9 @@ class ModelDataHandler: NSObject {
       // Gets the output class names for detected classes from labels list.
       let outputClassIndex = Int(outputClasses[i])
       let outputClass = labels[outputClassIndex + 1]
+      if outputClass == "dining table" {
+         continue
+      }
 
       var rect: CGRect = CGRect.zero
 
