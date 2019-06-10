@@ -1,7 +1,7 @@
 # CalorieCounter
 This application is a part of the distributed computing project at The University of Mebourne. 
-It can recognise 101 food types and measure distance between two points. By measure three dimensional
-sizes of the food, the volume can be estimated and so as calorie intake. 
+It can recognize 101 food types and measure the size of the food. By measure three dimensional
+sizes of the food, the volume can be estimated which can be used to calculate the total calories. 
 
 # Device Requirement
 This application using Augmented Reality (AR), so you need to run this app on IOS devices that can run ARKit. Based on Apple's guidelines, here are the iOS devices that will be able to run ARKit apps:
